@@ -1,1 +1,564 @@
-<h1>hahhahhh</h1>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性心理健康评估测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 90%;
+            min-height: 600px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .page {
+            display: none;
+            padding: 40px;
+            text-align: center;
+            min-height: 600px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page h1 {
+            color: #764ba2;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .page h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .intro-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #666;
+            text-align: left;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .question-container {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .option:hover {
+            background-color: #e9ecef;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .radar-chart {
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+        }
+
+        .result-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .dimension-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .dimension-score:last-child {
+            border-bottom: none;
+        }
+
+        .score-value {
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .page {
+                padding: 20px;
+            }
+            
+            .page h1 {
+                font-size: 2em;
+            }
+            
+            .radar-chart {
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <h1>性心理健康评估测试</h1>
+            <div class="intro-text">
+                <p>欢迎参与本次性心理健康评估测试。本测试旨在帮助您了解自己在性心理方面的健康状况，包含25个问题，涵盖5个重要维度：</p>
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>观念羞耻感</strong> - 对性本身的内化羞耻与道德负担</li>
+                    <li><strong>身体接纳度</strong> - 对身体形象及性感受的接纳与舒适程度</li>
+                    <li><strong>沟通自主性</strong> - 在性关系中表达需求与设立边界的能力</li>
+                    <li><strong>欲望自主性</strong> - 对自身性欲和愉悦的主动认同与追求</li>
+                    <li><strong>知识开放性</strong> - 对性知识的态度和获取行为的开放程度</li>
+                </ul>
+                <p>请根据您过去六个月内的真实感受和经历，诚实回答每个问题。测试大约需要10-15分钟完成。</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始测试</button>
+            <div class="disclaimer">
+                <strong>免责声明：</strong>本测试仅为一种自我探索工具，不能替代专业的心理或医学诊断。如果您感到极度困扰，请务必寻求合格的心理咨询师或医生的帮助。
+            </div>
+        </div>
+
+        <!-- 测试页面 -->
+        <div id="test-page" class="page">
+            <h2>性心理健康评估测试</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="question-container"></div>
+            <div class="error-message" id="error-message">请完成所有题目后再进行分析</div>
+            <button class="btn" onclick="analyzeResults()" id="analyze-btn">进行分析</button>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <h2>您的测试结果</h2>
+            <div class="result-section">
+                <h3>总体性心理健康指数</h3>
+                <div class="dimension-score">
+                    <span>综合得分：</span>
+                    <span class="score-value" id="total-score">-</span>
+                </div>
+                <div id="total-interpretation"></div>
+            </div>
+            
+            <div class="radar-chart">
+                <canvas id="radar-canvas" width="400" height="400"></canvas>
+            </div>
+            
+            <div class="result-section">
+                <h3>各维度详细得分</h3>
+                <div id="dimension-scores"></div>
+            </div>
+            
+            <div class="disclaimer">
+                <strong>结果解读：</strong>本测试结果仅供参考，旨在帮助您更好地了解自己。每个人的情况都是独特的，如需专业指导，建议咨询心理健康专家。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 测试题目数据
+        const questions = [
+            { id: 1, text: "我常常觉得有性欲望或性幻想是一件令人羞耻的事情。", dimension: "观念羞耻感", reverse: false },
+            { id: 2, text: "我能够自然地欣赏和接纳自己身体的私密部位。", dimension: "身体接纳度", reverse: false },
+            { id: 3, text: "我很难向伴侣清楚表达我在性行为中喜欢什么、不喜欢什么。", dimension: "沟通自主性", reverse: true },
+            { id: 4, text: "当我产生性欲时，我通常会主动寻求满足（如自慰或与伴侣亲密），而不是刻意压抑或忽略它。", dimension: "欲望自主性", reverse: false },
+            { id: 5, text: "我会主动通过各种渠道（如书籍、课程、可靠网站）去学习性知识。", dimension: "知识开放性", reverse: false },
+            { id: 6, text: "我认为‘好女孩’或‘好男孩’不应该有太强的性欲。", dimension: "观念羞耻感", reverse: true },
+            { id: 7, text: "在发生性行为时，我会因为担心身材不好而感到焦虑和分心。", dimension: "身体接纳度", reverse: true },
+            { id: 8, text: "即使感到不舒服或不想继续，我也很难在性行为过程中对伴侣说‘不’。", dimension: "沟通自主性", reverse: true },
+            { id: 9, text: "我会因为自慰而感到内疚或自责。", dimension: "欲望自主性", reverse: true },
+            { id: 10, text: "我认为公开谈论性话题是尴尬和不体面的。", dimension: "知识开放性", reverse: true },
+            { id: 11, text: "我担心自己在性方面的表现达不到伴侣或社会的期望。", dimension: "观念羞耻感", reverse: false },
+            { id: 12, text: "在亲密接触中，我能全身心投入并享受当下的快感，而不是胡思乱想。", dimension: "身体接纳度", reverse: false },
+            { id: 13, text: "当伴侣提出新的性爱方式或尝试时，我的第一反应通常是开放和好奇，而非排斥和拒绝。", dimension: "沟通自主性", reverse: false },
+            { id: 14, text: "我认为追求性的愉悦是个人生活中重要且正当的一部分。", dimension: "欲望自主性", reverse: false },
+            { id: 15, text: "当我看到媒体中开放的性表达内容时，会感到反感和不适。", dimension: "观念羞耻感", reverse: false },
+            { id: 16, text: "我对自己身体的性敏感地带（如哪些部位被触摸会带来快感）有清晰的了解。", dimension: "身体接纳度", reverse: false },
+            { id: 17, text: "我害怕在性行为中‘出丑’或‘做错事’。", dimension: "知识开放性", reverse: true },
+            { id: 18, text: "我可以自主决定是否发生性行为，而很少受到伴侣压力或社会观念的影响。", dimension: "沟通自主性", reverse: false },
+            { id: 19, text: "我认为性主要是为了满足伴侣或维系关系，而不是为了自己的快乐。", dimension: "欲望自主性", reverse: true },
+            { id: 20, text: "我会因为自己某种特殊的性偏好或性幻想而感到困扰。", dimension: "观念羞耻感", reverse: false },
+            { id: 21, text: "在购买情趣用品或避孕产品时，我会感到非常自在。", dimension: "沟通自主性", reverse: false },
+            { id: 22, text: "我常常在性行为后感到后悔、空虚或沮丧。", dimension: "身体接纳度", reverse: true },
+            { id: 23, text: "我认为性爱与情感是可以分离的，这对我来说不是问题。", dimension: "欲望自主性", reverse: false },
+            { id: 24, text: "当我与朋友讨论到与性相关的话题时，会感到非常自然。", dimension: "知识开放性", reverse: false },
+            { id: 25, text: "我清楚地知道如何让自己获得性高潮。", dimension: "知识开放性", reverse: false }
+        ];
+
+        // 选项标签
+        const options = [
+            { value: 1, label: "非常不符合" },
+            { value: 2, label: "不太符合" },
+            { value: 3, label: "一般/不确定" },
+            { value: 4, label: "比较符合" },
+            { value: 5, label: "非常符合" }
+        ];
+
+        // 维度配置
+        const dimensions = {
+            "观念羞耻感": { questions: [1, 6, 11, 15, 20], color: "#FF6B6B" },
+            "身体接纳度": { questions: [2, 7, 12, 16, 22], color: "#4ECDC4" },
+            "沟通自主性": { questions: [3, 8, 13, 18, 21], color: "#45B7D1" },
+            "欲望自主性": { questions: [4, 9, 14, 19, 23], color: "#96CEB4" },
+            "知识开放性": { questions: [5, 10, 17, 24, 25], color: "#FFEAA7" }
+        };
+
+        let answers = {};
+        let shuffledQuestions = [];
+
+        function startTest() {
+            // 随机打乱题目顺序
+            shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
+            showPage('test-page');
+            renderQuestions();
+            updateProgress();
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('question-container');
+            container.innerHTML = '';
+
+            shuffledQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <h3>${index + 1}. ${question.text}</h3>
+                    <div class="options">
+                        ${options.map(option => `
+                            <label class="option">
+                                <input type="radio" name="q${question.id}" value="${option.value}" onchange="updateAnswer(${question.id}, ${option.value})">
+                                ${option.label}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function updateAnswer(questionId, value) {
+            answers[questionId] = value;
+            updateProgress();
+            
+            // 清除错误消息
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        function updateProgress() {
+            const progress = (Object.keys(answers).length / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        function analyzeResults() {
+            // 检查是否所有题目都已回答
+            if (Object.keys(answers).length < questions.length) {
+                document.getElementById('error-message').style.display = 'block';
+                
+                // 高亮未回答的题目
+                questions.forEach(question => {
+                    if (!answers[question.id]) {
+                        const questionElement = document.querySelector(`input[name="q${question.id}"]`).closest('.question');
+                        questionElement.style.border = '2px solid #dc3545';
+                        questionElement.style.backgroundColor = '#f8d7da';
+                    }
+                });
+                return;
+            }
+
+            // 计算结果
+            const results = calculateResults();
+            showResults(results);
+            showPage('result-page');
+        }
+
+        function calculateResults() {
+            const dimensionScores = {};
+            
+            // 计算各维度得分
+            Object.keys(dimensions).forEach(dimensionName => {
+                const questionIds = dimensions[dimensionName].questions;
+                let totalScore = 0;
+                
+                questionIds.forEach(questionId => {
+                    const question = questions.find(q => q.id === questionId);
+                    let score = answers[questionId];
+                    
+                    // 反向计分
+                    if (question.reverse) {
+                        score = 6 - score;
+                    }
+                    
+                    totalScore += score;
+                });
+                
+                dimensionScores[dimensionName] = totalScore / questionIds.length;
+            });
+
+            // 计算总分
+            const totalScore = Object.values(dimensionScores).reduce((sum, score) => sum + score, 0) / Object.keys(dimensionScores).length;
+
+            return {
+                total: totalScore,
+                dimensions: dimensionScores
+            };
+        }
+
+        function showResults(results) {
+            // 显示总分
+            document.getElementById('total-score').textContent = results.total.toFixed(2);
+            
+            // 总分解释
+            let interpretation = '';
+            if (results.total <= 2.2) {
+                interpretation = '<p style="color: #dc3545;"><strong>高性压抑倾向</strong><br>您可能在多个方面感到显著的冲突和抑制，建议寻求专业心理咨询或性教育资源的帮助。</p>';
+            } else if (results.total <= 3.7) {
+                interpretation = '<p style="color: #ffc107;"><strong>中等性压抑水平</strong><br>您在某些情境或维度下感到困扰，这是大多数人的常态。可以通过自我觉察、与伴侣沟通和学习来改善。</p>';
+            } else {
+                interpretation = '<p style="color: #28a745;"><strong>低性压抑倾向</strong><br>您通常对性持有健康、开放和积极的态度，能较好地协调内在欲望与外部环境的关系。</p>';
+            }
+            document.getElementById('total-interpretation').innerHTML = interpretation;
+
+            // 显示各维度得分
+            const dimensionScoresContainer = document.getElementById('dimension-scores');
+            dimensionScoresContainer.innerHTML = '';
+            
+            Object.keys(results.dimensions).forEach(dimension => {
+                const score = results.dimensions[dimension];
+                const scoreDiv = document.createElement('div');
+                scoreDiv.className = 'dimension-score';
+                scoreDiv.innerHTML = `
+                    <span>${dimension}：</span>
+                    <span class="score-value">${score.toFixed(2)}</span>
+                `;
+                dimensionScoresContainer.appendChild(scoreDiv);
+            });
+
+            // 绘制雷达图
+            drawRadarChart(results.dimensions);
+        }
+
+        function drawRadarChart(dimensionScores) {
+            const canvas = document.getElementById('radar-canvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 150;
+
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const dimensionNames = Object.keys(dimensionScores);
+            const angleStep = (2 * Math.PI) / dimensionNames.length;
+
+            // 绘制背景网格
+            ctx.strokeStyle = '#e9ecef';
+            ctx.lineWidth = 1;
+            
+            // 绘制同心圆
+            for (let i = 1; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, (radius * i) / 5, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+
+            // 绘制轴线
+            dimensionNames.forEach((_, index) => {
+                const angle = index * angleStep - Math.PI / 2;
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            });
+
+            // 绘制数据多边形
+            ctx.strokeStyle = '#667eea';
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+
+            dimensionNames.forEach((dimension, index) => {
+                const score = dimensionScores[dimension];
+                const angle = index * angleStep - Math.PI / 2;
+                const distance = (score / 5) * radius;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // 绘制数据点
+            ctx.fillStyle = '#667eea';
+            dimensionNames.forEach((dimension, index) => {
+                const score = dimensionScores[dimension];
+                const angle = index * angleStep - Math.PI / 2;
+                const distance = (score / 5) * radius;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // 绘制标签
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            dimensionNames.forEach((dimension, index) => {
+                const angle = index * angleStep - Math.PI / 2;
+                const labelDistance = radius + 30;
+                const x = centerX + Math.cos(angle) * labelDistance;
+                const y = centerY + Math.sin(angle) * labelDistance;
+                
+                ctx.fillText(dimension, x, y);
+            });
+
+            // 绘制分数标签
+            ctx.fillStyle = '#666';
+            ctx.font = '10px Arial';
+            for (let i = 1; i <= 5; i++) {
+                ctx.fillText(i.toString(), centerX + 5, centerY - (radius * i) / 5 + 3);
+            }
+        }
+    </script>
+</body>
+</html>
+
