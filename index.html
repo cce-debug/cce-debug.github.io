@@ -245,18 +245,15 @@
 
          .radar-chart {
              width: 100%;
-             max-width: 560px;
              height: auto;
-             margin: 20px auto;
              display: flex;
              justify-content: center;
-             padding: 10px;
+             align-items: center;
          }
 
          .radar-chart svg {
              width: 100%;
              height: auto;
-             max-width: 560px;
          }
 
         .result-section {
@@ -265,6 +262,34 @@
             border-radius: 15px;
             margin: 20px 0;
             text-align: left;
+        }
+
+        .result-layout {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            align-items: stretch;
+        }
+
+        .result-left {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-right {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .result-right h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #667eea;
         }
 
         .total-score-display {
@@ -371,8 +396,18 @@
                  font-size: 1.5em;
              }
              
-             .radar-chart {
-                 max-width: 420px;
+             .result-layout {
+                 flex-direction: column;
+                 gap: 20px;
+             }
+
+             .result-left {
+                 flex: none;
+                 width: 100%;
+             }
+
+             .result-right {
+                 width: 100%;
              }
 
              .score-number {
@@ -509,7 +544,7 @@
              }
 
              .radar-chart {
-                 max-width: 280px;
+                 max-width: 320px;
                  margin: 15px auto;
              }
 
@@ -655,13 +690,17 @@
                 <div class="score-description" id="score-description">-</div>
             </div>
             
-             <div class="radar-chart" id="radar-chart-container">
-                 <!-- SVG雷达图将在此处生成 -->
-             </div>
-            
-            <div class="result-section">
-                <h3>各维度详细得分</h3>
-                <div id="dimension-scores"></div>
+            <div class="result-layout">
+                <div class="result-left">
+                    <div class="radar-chart" id="radar-chart-container">
+                        <!-- SVG雷达图将在此处生成 -->
+                    </div>
+                </div>
+                
+                <div class="result-right">
+                    <h3>各维度详细得分</h3>
+                    <div id="dimension-scores"></div>
+                </div>
             </div>
             
             <div class="disclaimer">
@@ -722,6 +761,7 @@
         let answers = {};
         let shuffledQuestions = [];
         let currentQuestionIndex = 0;
+        let isTransitioning = false; // 防止跳转期间重复点击
 
         // 开始测试
         function startTest() {
@@ -778,7 +818,9 @@
                     <span class="option-label">${option.label}</span>
                 `;
                 
-                optionDiv.addEventListener('click', () => {
+                // 只监听label的点击事件，防止重复触发
+                optionDiv.addEventListener('click', (e) => {
+                    e.preventDefault(); // 阻止默认行为
                     selectOption(question.id, option.value);
                 });
                 
@@ -791,7 +833,17 @@
 
         // 选择选项
         function selectOption(questionId, value) {
-            answers[questionId] = value;
+            // 如果正在跳转中，忽略点击
+            if (isTransitioning) {
+                console.log('正在跳转中，忽略本次点击');
+                return;
+            }
+            
+            // 保存答案
+            answers[questionId] = parseInt(value);
+            
+            console.log(`选择题目ID: ${questionId}, 值: ${value}, 当前题目索引: ${currentQuestionIndex}`);
+            console.log('当前所有答案:', answers);
             
             // 更新选项样式
             document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
@@ -807,15 +859,29 @@
             updateProgress();
             updateNavigationButtons();
             
-            // 自动跳转到下一题（如果不是最后一题）
+            // 设置跳转标志
+            isTransitioning = true;
+            
+            // 自动跳转逻辑（延迟300ms，让用户看到选择效果）
             setTimeout(() => {
-                if (currentQuestionIndex < questions.length - 1) {
-                    nextQuestion();
-                } else {
-                    // 最后一题，自动进入总览
+                // 判断是否为最后一题（索引从0开始，所以最后一题索引是questions.length - 1）
+                const isLastQuestion = currentQuestionIndex === questions.length - 1;
+                
+                if (isLastQuestion) {
+                    // 最后一题，跳转到总览
+                    console.log('这是最后一题，进入总览');
                     showOverview();
+                } else {
+                    // 不是最后一题，跳转到下一题
+                    console.log(`不是最后一题，跳转到下一题。当前索引: ${currentQuestionIndex}, 下一题索引: ${currentQuestionIndex + 1}`);
+                    currentQuestionIndex++;
+                    renderCurrentQuestion();
+                    updateProgress();
                 }
-            }, 300); // 延迟300ms，让用户看到选择效果
+                
+                // 跳转完成，重置标志
+                isTransitioning = false;
+            }, 300);
         }
 
         // 更新进度条
@@ -885,9 +951,20 @@
             const container = document.getElementById('overview-container');
             container.innerHTML = '';
             
+            console.log('渲染总览，当前所有答案:', answers);
+            console.log('题目总数:', shuffledQuestions.length);
+            
             shuffledQuestions.forEach((question, index) => {
                 const hasAnswer = answers[question.id] !== undefined;
-                const answerText = hasAnswer ? options.find(opt => opt.value === answers[question.id]).label : '未回答';
+                let answerText = '未回答';
+                
+                if (hasAnswer) {
+                    const answerValue = answers[question.id];
+                    const option = options.find(opt => opt.value === answerValue);
+                    answerText = option ? option.label : '未回答';
+                }
+                
+                console.log(`题目${index + 1} (ID:${question.id}): ${hasAnswer ? '已回答' : '未回答'} - ${answerText}`);
                 
                 const questionDiv = document.createElement('div');
                 questionDiv.className = `overview-question ${hasAnswer ? 'answered' : 'unanswered'}`;
@@ -905,6 +982,9 @@
                 
                 container.appendChild(questionDiv);
             });
+            
+            const answeredCount = Object.keys(answers).length;
+            console.log(`总览页面：已回答 ${answeredCount}/${questions.length} 题`);
         }
 
         // 返回答题
@@ -1023,12 +1103,12 @@
          // 绘制雷达图 (SVG版本)
          function drawRadarChart(dimensionScores) {
              const container = document.getElementById('radar-chart-container');
-             const padding = 80; // 增加边距，为文字留出空间
-             const svgSize = 400 + padding * 2; // 增加总尺寸
+             const padding = 35; // 进一步减少边距
+             const svgSize = 360 + padding * 2; // 优化总尺寸
              const centerX = svgSize / 2;
              const centerY = svgSize / 2;
-             const radius = 150;
-             const labelDistance = radius + 50; // 增加标签距离
+             const radius = 150; // 雷达图半径
+             const labelDistance = radius + 30; // 标签距离，确保不遮挡
 
              const dimensionNames = Object.keys(dimensionScores);
              const angleStep = (2 * Math.PI) / dimensionNames.length;
