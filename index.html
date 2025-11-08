@@ -243,11 +243,21 @@
             text-align: right;
         }
 
-        .radar-chart {
-            width: 400px;
-            height: 400px;
-            margin: 20px auto;
-        }
+         .radar-chart {
+             width: 100%;
+             max-width: 560px;
+             height: auto;
+             margin: 20px auto;
+             display: flex;
+             justify-content: center;
+             padding: 10px;
+         }
+
+         .radar-chart svg {
+             width: 100%;
+             height: auto;
+             max-width: 560px;
+         }
 
         .result-section {
             background: #f8f9fa;
@@ -342,38 +352,240 @@
             color: #856404;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                margin: 10px auto;
-            }
-            
-            .page {
-                padding: 20px;
-            }
-            
-            .page h1 {
-                font-size: 2em;
-            }
-            
-            .radar-chart {
-                width: 300px;
-                height: 300px;
-            }
+         @media (max-width: 768px) {
+             .container {
+                 width: 95%;
+                 margin: 10px auto;
+                 border-radius: 15px;
+             }
+             
+             .page {
+                 padding: 25px 20px;
+             }
+             
+             .page h1 {
+                 font-size: 1.8em;
+             }
 
-            .score-number {
-                font-size: 3em;
-            }
+             .page h2 {
+                 font-size: 1.5em;
+             }
+             
+             .radar-chart {
+                 max-width: 420px;
+             }
 
-            .navigation {
-                flex-direction: column;
-                gap: 15px;
-            }
+             .score-number {
+                 font-size: 3em;
+             }
 
-            .option {
-                padding: 15px;
-            }
-        }
+             .score-label {
+                 font-size: 1.2em;
+             }
+
+             .navigation {
+                 flex-direction: row;
+                 gap: 10px;
+             }
+
+             .navigation .btn {
+                 flex: 1;
+                 padding: 12px 20px;
+                 font-size: 1em;
+                 margin: 0;
+             }
+
+             .option {
+                 padding: 15px;
+             }
+
+             .option-label {
+                 font-size: 1em;
+             }
+
+             .question-text {
+                 font-size: 1.1em;
+                 padding: 20px;
+             }
+
+             .question-number {
+                 font-size: 1em;
+             }
+
+             .progress-header {
+                 padding: 15px;
+             }
+
+             .progress-text {
+                 font-size: 0.95em;
+             }
+
+             .total-score-display {
+                 padding: 30px 20px;
+             }
+
+             .intro-text {
+                 font-size: 1em;
+             }
+
+             .overview-container {
+                 max-height: 300px;
+             }
+
+             .overview-text {
+                 font-size: 0.9em;
+             }
+
+             .overview-answer {
+                 font-size: 0.85em;
+                 min-width: 100px;
+             }
+
+             .result-section {
+                 padding: 20px;
+             }
+
+             .dimension-progress-bar {
+                 height: 18px;
+             }
+         }
+
+         @media (max-width: 480px) {
+             .container {
+                 width: 100%;
+                 margin: 0;
+                 border-radius: 0;
+                 min-height: 100vh;
+             }
+
+             body {
+                 padding: 0;
+             }
+
+             .page {
+                 padding: 20px 15px;
+                 min-height: calc(100vh - 80px);
+             }
+
+             .page h1 {
+                 font-size: 1.6em;
+                 margin-bottom: 20px;
+             }
+
+             .page h2 {
+                 font-size: 1.3em;
+             }
+
+             .intro-text {
+                 font-size: 0.95em;
+             }
+
+             .intro-text ul {
+                 margin: 15px 0;
+                 padding-left: 18px;
+             }
+
+             .question-text {
+                 font-size: 1em;
+                 padding: 18px;
+             }
+
+             .option {
+                 padding: 12px 15px;
+             }
+
+             .option input[type="radio"] {
+                 transform: scale(1.1);
+                 margin-right: 12px;
+             }
+
+             .option-label {
+                 font-size: 0.95em;
+             }
+
+             .navigation .btn {
+                 padding: 12px 15px;
+                 font-size: 0.95em;
+             }
+
+             .radar-chart {
+                 max-width: 280px;
+                 margin: 15px auto;
+             }
+
+             .score-number {
+                 font-size: 2.5em;
+             }
+
+             .score-label {
+                 font-size: 1.1em;
+             }
+
+             .score-description {
+                 font-size: 0.95em;
+             }
+
+             .total-score-display {
+                 padding: 25px 15px;
+                 margin: 20px 0;
+             }
+
+             .result-section h3 {
+                 font-size: 1.1em;
+             }
+
+             .dimension-name {
+                 font-size: 0.9em;
+             }
+
+             .score-value {
+                 font-size: 1em;
+             }
+
+             .dimension-progress-bar {
+                 height: 16px;
+             }
+
+             .overview-container {
+                 max-height: 250px;
+             }
+
+             .overview-question {
+                 padding: 12px 15px;
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 8px;
+             }
+
+             .overview-text {
+                 margin-right: 0;
+                 font-size: 0.85em;
+             }
+
+             .overview-answer {
+                 text-align: left;
+                 min-width: auto;
+                 font-size: 0.8em;
+             }
+
+             .progress-header {
+                 padding: 12px 15px;
+             }
+
+             .progress-text {
+                 font-size: 0.85em;
+             }
+
+             .disclaimer {
+                 font-size: 0.85em;
+                 padding: 12px;
+             }
+
+             .btn {
+                 padding: 12px 30px;
+                 font-size: 1em;
+             }
+         }
     </style>
 </head>
 <body>
@@ -443,9 +655,9 @@
                 <div class="score-description" id="score-description">-</div>
             </div>
             
-            <div class="radar-chart">
-                <canvas id="radar-canvas" width="400" height="400"></canvas>
-            </div>
+             <div class="radar-chart" id="radar-chart-container">
+                 <!-- SVG雷达图将在此处生成 -->
+             </div>
             
             <div class="result-section">
                 <h3>各维度详细得分</h3>
@@ -808,103 +1020,124 @@
             drawRadarChart(results.dimensions);
         }
 
-        // 绘制雷达图
-        function drawRadarChart(dimensionScores) {
-            const canvas = document.getElementById('radar-canvas');
-            const ctx = canvas.getContext('2d');
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = 150;
+         // 绘制雷达图 (SVG版本)
+         function drawRadarChart(dimensionScores) {
+             const container = document.getElementById('radar-chart-container');
+             const padding = 80; // 增加边距，为文字留出空间
+             const svgSize = 400 + padding * 2; // 增加总尺寸
+             const centerX = svgSize / 2;
+             const centerY = svgSize / 2;
+             const radius = 150;
+             const labelDistance = radius + 50; // 增加标签距离
 
-            // 清空画布
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+             const dimensionNames = Object.keys(dimensionScores);
+             const angleStep = (2 * Math.PI) / dimensionNames.length;
 
-            const dimensionNames = Object.keys(dimensionScores);
-            const angleStep = (2 * Math.PI) / dimensionNames.length;
+             // 创建SVG元素
+             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+             svg.setAttribute('viewBox', `0 0 ${svgSize} ${svgSize}`);
+             svg.setAttribute('width', '100%');
+             svg.setAttribute('height', '100%');
+             svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
-            // 绘制背景网格
-            ctx.strokeStyle = '#e9ecef';
-            ctx.lineWidth = 1;
-            
-            // 绘制同心圆
-            for (let i = 1; i <= 5; i++) {
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, (radius * i) / 5, 0, 2 * Math.PI);
-                ctx.stroke();
-            }
+             // 绘制同心圆（背景网格）
+             for (let i = 1; i <= 5; i++) {
+                 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                 circle.setAttribute('cx', centerX);
+                 circle.setAttribute('cy', centerY);
+                 circle.setAttribute('r', (radius * i) / 5);
+                 circle.setAttribute('fill', 'none');
+                 circle.setAttribute('stroke', '#e9ecef');
+                 circle.setAttribute('stroke-width', '1');
+                 svg.appendChild(circle);
+             }
 
-            // 绘制轴线
-            dimensionNames.forEach((_, index) => {
-                const angle = index * angleStep - Math.PI / 2;
-                const x = centerX + Math.cos(angle) * radius;
-                const y = centerY + Math.sin(angle) * radius;
-                
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.lineTo(x, y);
-                ctx.stroke();
-            });
+             // 绘制轴线
+             dimensionNames.forEach((_, index) => {
+                 const angle = index * angleStep - Math.PI / 2;
+                 const x = centerX + Math.cos(angle) * radius;
+                 const y = centerY + Math.sin(angle) * radius;
+                 
+                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                 line.setAttribute('x1', centerX);
+                 line.setAttribute('y1', centerY);
+                 line.setAttribute('x2', x);
+                 line.setAttribute('y2', y);
+                 line.setAttribute('stroke', '#e9ecef');
+                 line.setAttribute('stroke-width', '1');
+                 svg.appendChild(line);
+             });
 
-            // 绘制数据多边形
-            ctx.strokeStyle = '#667eea';
-            ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
+             // 绘制分数标签（显示归一化分数）
+             for (let i = 1; i <= 5; i++) {
+                 const normalizedLabel = Math.round(((i - 1) / 4) * 100);
+                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                 text.setAttribute('x', centerX + 5);
+                 text.setAttribute('y', centerY - (radius * i) / 5 + 3);
+                 text.setAttribute('fill', '#999');
+                 text.setAttribute('font-size', '10');
+                 text.setAttribute('font-family', 'Arial, sans-serif');
+                 text.textContent = normalizedLabel.toString();
+                 svg.appendChild(text);
+             }
 
-            dimensionNames.forEach((dimension, index) => {
-                const score = dimensionScores[dimension];
-                const angle = index * angleStep - Math.PI / 2;
-                const distance = (score / 5) * radius;
-                const x = centerX + Math.cos(angle) * distance;
-                const y = centerY + Math.sin(angle) * distance;
-                
-                if (index === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            });
+             // 绘制数据多边形
+             let polygonPoints = '';
+             const dataPoints = [];
+             
+             dimensionNames.forEach((dimension, index) => {
+                 const score = dimensionScores[dimension];
+                 const angle = index * angleStep - Math.PI / 2;
+                 const distance = (score / 5) * radius;
+                 const x = centerX + Math.cos(angle) * distance;
+                 const y = centerY + Math.sin(angle) * distance;
+                 
+                 polygonPoints += `${x},${y} `;
+                 dataPoints.push({ x, y });
+             });
 
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+             // 填充多边形
+             const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+             polygon.setAttribute('points', polygonPoints.trim());
+             polygon.setAttribute('fill', 'rgba(102, 126, 234, 0.2)');
+             polygon.setAttribute('stroke', '#667eea');
+             polygon.setAttribute('stroke-width', '3');
+             polygon.setAttribute('stroke-linejoin', 'round');
+             svg.appendChild(polygon);
 
-            // 绘制数据点
-            ctx.fillStyle = '#667eea';
-            dimensionNames.forEach((dimension, index) => {
-                const score = dimensionScores[dimension];
-                const angle = index * angleStep - Math.PI / 2;
-                const distance = (score / 5) * radius;
-                const x = centerX + Math.cos(angle) * distance;
-                const y = centerY + Math.sin(angle) * distance;
-                
-                ctx.beginPath();
-                ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                ctx.fill();
-            });
+             // 绘制数据点
+             dataPoints.forEach(point => {
+                 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                 circle.setAttribute('cx', point.x);
+                 circle.setAttribute('cy', point.y);
+                 circle.setAttribute('r', '5');
+                 circle.setAttribute('fill', '#667eea');
+                 svg.appendChild(circle);
+             });
 
-            // 绘制标签
-            ctx.fillStyle = '#333';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'center';
-            
-            dimensionNames.forEach((dimension, index) => {
-                const angle = index * angleStep - Math.PI / 2;
-                const labelDistance = radius + 30;
-                const x = centerX + Math.cos(angle) * labelDistance;
-                const y = centerY + Math.sin(angle) * labelDistance;
-                
-                ctx.fillText(dimension, x, y);
-            });
+             // 绘制维度标签
+             dimensionNames.forEach((dimension, index) => {
+                 const angle = index * angleStep - Math.PI / 2;
+                 const x = centerX + Math.cos(angle) * labelDistance;
+                 const y = centerY + Math.sin(angle) * labelDistance;
+                 
+                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                 text.setAttribute('x', x);
+                 text.setAttribute('y', y);
+                 text.setAttribute('fill', '#333');
+                 text.setAttribute('font-size', '12');
+                 text.setAttribute('font-weight', '500');
+                 text.setAttribute('font-family', 'Arial, Microsoft YaHei, sans-serif');
+                 text.setAttribute('text-anchor', 'middle');
+                 text.setAttribute('dominant-baseline', 'middle');
+                 text.textContent = dimension;
+                 svg.appendChild(text);
+             });
 
-            // 绘制分数标签（显示归一化分数）
-            ctx.fillStyle = '#666';
-            ctx.font = '10px Arial';
-            for (let i = 1; i <= 5; i++) {
-                const normalizedLabel = Math.round(((i - 1) / 4) * 100);
-                ctx.fillText(normalizedLabel.toString(), centerX + 5, centerY - (radius * i) / 5 + 3);
-            }
-        }
+             // 清空容器并添加SVG
+             container.innerHTML = '';
+             container.appendChild(svg);
+         }
     </script>
 </body>
 </html>
