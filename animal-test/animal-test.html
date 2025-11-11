@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动物人格风格测试</title>
+    <link rel="stylesheet" href="animal-test.css">
+</head>
+<body>
+    <!-- LOGO区域 -->
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo-image">
+    </div>
+    <div class="container">
+        <!-- 进度条头部 -->
+        <div class="progress-header" id="progress-header" style="display: none;">
+            <div class="progress-info">
+                <span class="progress-text" id="progress-text">题目 1 / 30</span>
+                <span class="progress-text" id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <h1>🐅 动物人格测试</h1>
+            <div class="intro-text">
+                <p>欢迎参加 <strong>动物人格测试</strong>。本测评参考 PDP 行为风格模型与动物行为心理学观点，透过 30 题陈述帮助你辨识在团队协作、沟通互动与压力情境下的典型反应模式。</p>
+                <p><strong>作答方式：</strong>请依据自身真实情况，以 5 点计分法对每个陈述进行评分，建议直觉作答，完成约需 8-10 分钟。</p>
+                <p><strong>评分标准：</strong>非常同意（5分） / 比较同意（4分） / 差不多（3分） / 有一点同意（2分） / 不同意（1分）。</p>
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>老虎型</strong> —— 果断、掌控、结果导向，擅长推动目标与决策执行。</li>
+                    <li><strong>孔雀型</strong> —— 热情、表达、人际导向，善于沟通串联资源。</li>
+                    <li><strong>考拉型</strong> —— 耐心、稳健、关系维护，提供团队支持与安定。</li>
+                    <li><strong>猫头鹰型</strong> —— 精确、分析、流程导向，注重逻辑、细节与标准。</li>
+                    <li><strong>变色龙型</strong> —— 适应、整合、灵活应对，能在不同情境快速调整。</li>
+                </ul>
+                <p>结果将显示五种动物类型的得分占比，并标注你的主导型或组合型人格风格，帮助你掌握优势与潜在盲点。</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始测试</button>
+            <div class="disclaimer">
+                <strong>重要提示：</strong>本测评为自我觉察工具，不构成临床诊断。若测评结果引发困扰或已影响你的生活、人际或工作，请寻求专业心理咨询协助。
+            </div>
+        </div>
+
+        <!-- 单题测试页面 -->
+        <div id="question-page" class="page">
+            <div class="single-question">
+                <div class="question-number" id="question-number">题目 1 / 30</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="question-options"></div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>上一题</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 答题总览页面 -->
+        <div id="overview-page" class="page">
+            <h2>答题总览</h2>
+            <p style="margin-bottom: 20px; color: #666;">请检查您的答案，确认无误后点击"进行分析"按钮。</p>
+            <div class="overview-container" id="overview-container"></div>
+            <div style="text-align: center;">
+                <button class="btn btn-secondary" onclick="backToQuestion()">返回答题</button>
+                <button class="btn" onclick="analyzeResults()" id="analyze-btn">进行分析</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <h2>您的测试结果</h2>
+
+            <div class="total-score-display">
+                <div class="score-number" id="total-score-number">-</div>
+                <div class="score-label" id="score-label">主导动物类型</div>
+                <div class="score-description" id="score-description">-</div>
+            </div>
+            <div class="result-layout">
+                <div class="result-left">
+                    <div class="radar-chart" id="radar-chart-container">
+                        <!-- SVG雷达图将在此处生成 -->
+                    </div>
+                </div>
+                
+                <div class="result-right">
+                    <h3>各类型详细得分</h3>
+                    <div id="dimension-scores"></div>
+                </div>
+            </div>
+            <!-- 分析说明 -->
+            <div class="score-legend" aria-labelledby="score-legend-title">
+                <h3 id="score-legend-title">结果解读指南</h3>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-high">典型型（≥70%）</div>
+                    <div class="legend-text">单一类型得分 21 分以上，显示该动物风格是你的核心驱动力，行为模式具有高度一致性。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-medium">双主导型（≥60%）</div>
+                    <div class="legend-text">若有两种类型得分至少 18 分，代表你可以在不同情境灵活切换两种主导风格。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-low">均衡型（最高-最低 ≤ 8分）</div>
+                    <div class="legend-text">五种类型得分相近，显示你具备多元化的行为策略，可在团队中扮演不同角色。</div>
+                </div>
+            </div>
+
+            <!-- AI深度分析区域 -->
+            <div class="ai-analysis-section">
+                <div class="ai-analysis-header">
+                    <h3>🤖 AI个性化深度分析</h3>
+                </div>
+                <div id="ai-analysis-container"><!-- AI分析内容将在这里显示 --></div>
+            </div>
+            <div class="disclaimer">
+                <strong>重要提示：</strong>本测评结果仅供行为风格参考，不可替代专业诊断。若测评结果引发困扰，请与心理咨询师或职涯顾问联系。
+            </div>
+        </div><!-- end result-page -->
+    </div><!-- end container -->
+
+    <script>
+        (function () {
+            const accessGranted = sessionStorage.getItem('animalTestAccessGranted');
+            if (accessGranted !== 'true') {
+                window.location.href = 'animal-test-start.html';
+            }
+        })();
+    </script>
+    <script src="animal-test.js"></script>
+    <!-- copyright -->
+    <div class="footer-copyright">Copyright © HC.emotion</div>
+</body>
+</html>
