@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性压抑程度测试</title>
+    <link rel="stylesheet" href="sex-test.css">
+</head>
+<body>
+    <!-- LOGO区域 -->
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo-image">
+    </div>
+    <div class="container">
+        <!-- 进度条头部 -->
+        <div class="progress-header" id="progress-header" style="display: none;">
+            <div class="progress-info">
+                <span class="progress-text" id="progress-text">题目 1 / 25</span>
+                <span class="progress-text" id="progress-percentage">4%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <h1>性压抑程度测试</h1>
+            <div class="intro-text">
+                <p>欢迎进行性压抑程度测试。本测试旨在帮助您了解自己在性心理方面的健康状况，包含25个问题，涵盖5个重要维度：</p>
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>观念羞耻感</strong> - 对性本身的内化羞耻与道德负担</li>
+                    <li><strong>身体接纳度</strong> - 对身体形象及性感受的接纳与舒适程度</li>
+                    <li><strong>沟通自主性</strong> - 在性关系中表达需求与设立边界的能力</li>
+                    <li><strong>欲望自主性</strong> - 对自身性欲和愉悦的主动认同与追求</li>
+                    <li><strong>知识开放性</strong> - 对性知识的态度和获取行为的开放程度</li>
+                </ul>
+                <p>请根据您过去六个月内的真实感受和经历，诚实回答每个问题。测试大约需要10-15分钟完成。</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始测试</button>
+            <div class="disclaimer">
+                <strong>免责声明：</strong>本测试仅为一种自我探索工具，不能替代专业的心理或医学诊断。如果您感到极度困扰，请务必寻求合格的心理咨询师或医生的帮助。
+            </div>
+        </div>
+
+        <!-- 单题测试页面 -->
+        <div id="question-page" class="page">
+            <div class="single-question">
+                <div class="question-number" id="question-number">题目 1 / 25</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="question-options"></div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>上一题</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 答题总览页面 -->
+        <div id="overview-page" class="page">
+            <h2>答题总览</h2>
+            <p style="margin-bottom: 20px; color: #666;">请检查您的答案，确认无误后点击"进行分析"按钮。</p>
+            <div class="overview-container" id="overview-container"></div>
+            <div style="text-align: center;">
+                <button class="btn btn-secondary" onclick="backToQuestion()">返回答题</button>
+                <button class="btn" onclick="analyzeResults()" id="analyze-btn">进行分析</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <h2>您的测试结果</h2>
+            
+            <div class="total-score-display">
+                <div class="score-number" id="total-score-number">-</div>
+                <div class="score-label" id="score-label">性压抑程度</div>
+                <div class="score-description" id="score-description">-</div>
+            </div>
+            <div class="result-layout">
+                <div class="result-left">
+                    <div class="radar-chart" id="radar-chart-container">
+                        <!-- SVG雷达图将在此处生成 -->
+                    </div>
+                </div>
+                
+                <div class="result-right">
+                    <h3>各维度详细得分</h3>
+                    <div id="dimension-scores"></div>
+                </div>
+            </div>
+            <!-- 评分等级样式已移动至 sex-test.css -->
+
+            <div class="score-legend" aria-labelledby="score-legend-title">
+                <h3 id="score-legend-title">得分等级说明</h3>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-high">0 - 33分</div>
+                    <div class="legend-text"><strong>高性压抑倾向</strong> 可能在多个方面感到显著的冲突和抑制，建议寻求专业心理咨询或性教育资源的帮助。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-medium">34 - 66分</div>
+                    <div class="legend-text"><strong>中等性压抑水平</strong> 在某些情境或维度下感到困扰，是大多数人的常态。可以通过自我觉察、与伴侣沟通和学习来改善。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-low">66 - 100分</div>
+                    <div class="legend-text"><strong>低性压抑倾向</strong> 通常对性持有健康、开放和积极的态度，能较好地协调内在欲望与外部环境的关系。</div>
+                </div>
+            </div>
+            <!-- AI深度分析区域 -->
+            <div class="ai-analysis-section">
+                <div class="ai-analysis-header">
+                    <h3>🤖 AI个性化深度分析</h3>
+                </div>
+                <div id="ai-analysis-container"><!-- AI分析内容将在这里显示 --></div>
+            </div>
+            <div class="disclaimer">
+                <strong>免责声明：</strong>本测试结果为自我评估参考，不能作为任何专业的心理诊断依据。如果测试结果让你感到困扰，或这些特质严重影响了你的生活与人际关系，建议寻求专业心理咨询师的评估和帮助。
+            </div>
+        </div><!-- end result-page -->
+    </div><!-- end container -->
+
+    <script>
+        (function () {
+            const accessGranted = sessionStorage.getItem("sexTestAccessGranted");
+            if (accessGranted !== "true") {
+                window.location.replace("sex-test-start.html");
+            } else {
+                sessionStorage.removeItem("sexTestAccessGranted");
+            }
+        })();
+    </script>
+    <script src="sex-test.js"></script>
+    <!-- copyright -->
+    <div class="footer-copyright">Copyright © HC.emotion</div>
+</body>
+</html>
