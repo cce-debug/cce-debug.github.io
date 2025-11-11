@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPD人格倾向测试 · 密钥验证</title>
+    <link rel="stylesheet" href="../sex-test/sex-test-start.css">
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logo.jpg" alt="HC 情感测试 Logo" class="logo-image">
+    </div>
+    <main class="auth-card" role="main">
+        <header class="auth-header">
+            <h1>NPD人格倾向测试密钥验证</h1>
+            <p>为了保护测评内容，仅向已获授权的用户开放。请输入密钥后继续进入测评。</p>
+        </header>
+        <form id="access-form" class="access-form" autocomplete="off">
+            <label for="access-key">访问密钥</label>
+            <input id="access-key" type="password" placeholder="请输入密钥" required aria-required="true">
+            <div id="error-message" class="error-message" aria-live="polite"></div>
+            <button type="submit" class="btn">验证并进入测试</button>
+        </form>
+        <section class="tips">
+            <h2>忘记密钥？</h2>
+            <p>请联系测试发放人员或您的专属顾问获取访问密钥。为了保障隐私，密钥不会在页面上明文展示。</p>
+        </section>
+    </main>
+    <footer class="footer">Copyright © HC.emotion</footer>
+
+    <script src="npd-test-start.js" defer></script>
+</body>
+</html>

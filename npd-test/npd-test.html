@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPD人格倾向测试</title>
+    <link rel="stylesheet" href="npd-test.css">
+</head>
+<body>
+    <!-- LOGO区域 -->
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo-image">
+    </div>
+    <div class="container">
+        <!-- 进度条头部 -->
+        <div class="progress-header" id="progress-header" style="display: none;">
+            <div class="progress-info">
+                <span class="progress-text" id="progress-text">题目 1 / 30</span>
+                <span class="progress-text" id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <h1>NPD人格倾向测试</h1>
+            <div class="intro-text">
+                <p>欢迎参加 <strong>NPD（自恋型人格倾向）</strong> 测试。本量表参考 DSM-5 与 NPI 相关研究，聚焦NPD常见的六个特质向度，共30道陈述题，帮助您检视自我关注、人际互动与内在驱动力。</p>
+                <p><strong>作答说明：</strong>依据真实状态在 5 个选项中选择最符合的一项：1=非常不符合，2=不太符合，3=不确定，4=比较符合，5=非常符合。请凭第一直觉完成，测试约需 10 分钟。</p>
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>夸大自我</strong> — 是否呈现对自身成就与能力的夸大认知与展现</li>
+                    <li><strong>特权意识</strong> — 对优待、资源及规则例外的理所当然感</li>
+                    <li><strong>渴望钦佩</strong> — 对关注、赞美与外部肯定的强烈需求</li>
+                    <li><strong>缺乏共情</strong> — 难以理解或回应他人情绪与需求的程度</li>
+                    <li><strong>剥削倾向</strong> — 是否倾向利用他人以达成个人目标</li>
+                    <li><strong>傲慢嫉妒</strong> — 内在优越感与对他人成就的敏感或嫉妒</li>
+                </ul>
+                <p>结果将呈现各维度得分及总体NPD倾向百分比。请将结果视作自我觉察参考，如已对生活或人际造成困扰，建议寻求专业心理咨询协助。</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始测试</button>
+            <div class="disclaimer">
+                <strong>重要提示：</strong>本测评为筛查工具，不构成临床诊断。若测评结果引发困扰或已影响您的生活、人际与工作，请及时联系合格的心理健康专业人士。
+            </div>
+        </div>
+
+        <!-- 单题测试页面 -->
+        <div id="question-page" class="page">
+            <div class="single-question">
+                <div class="question-number" id="question-number">题目 1 / 30</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="question-options"></div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>上一题</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 答题总览页面 -->
+        <div id="overview-page" class="page">
+            <h2>答题总览</h2>
+            <p style="margin-bottom: 20px; color: #666;">请检查您的答案，确认无误后点击"进行分析"按钮。</p>
+            <div class="overview-container" id="overview-container"></div>
+            <div style="text-align: center;">
+                <button class="btn btn-secondary" onclick="backToQuestion()">返回答题</button>
+                <button class="btn" onclick="analyzeResults()" id="analyze-btn">进行分析</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <h2>您的测试结果</h2>
+            
+            <div class="total-score-display">
+                <div class="score-number" id="total-score-number">-</div>
+                <div class="score-label" id="score-label">NPD倾向等级</div>
+                <div class="score-description" id="score-description">-</div>
+            </div>
+            <div class="result-layout">
+                <div class="result-left">
+                    <div class="radar-chart" id="radar-chart-container">
+                        <!-- SVG雷达图将在此处生成 -->
+                    </div>
+                </div>
+                
+                <div class="result-right">
+                    <h3>各维度详细得分</h3>
+                    <div id="dimension-scores"></div>
+                </div>
+            </div>
+            <!-- 评分等级样式定义于 npd-test.css -->
+
+            <div class="score-legend" aria-labelledby="score-legend-title">
+                <h3 id="score-legend-title">得分等级说明</h3>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-high">高（≥70%）</div>
+                    <div class="legend-text"><strong>高度倾向</strong> 该维度特质表现明显，可能对人际互动、同理与合作造成显著影响，建议积极寻求专业协助。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-medium">中（40% - 69%）</div>
+                    <div class="legend-text"><strong>中度倾向</strong> 在特定情境下可能凸显自我需求或控制欲，建议持续留意触发情境并练习调节策略。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-low">低（≤39%）</div>
+                    <div class="legend-text"><strong>低度倾向</strong> 特质保持在相对健康范围，通常能兼顾自我需求与他人感受。</div>
+                </div>
+            </div>
+            <!-- AI深度分析区域 -->
+            <div class="ai-analysis-section">
+                <div class="ai-analysis-header">
+                    <h3>🤖 AI个性化深度分析</h3>
+                </div>
+                <div id="ai-analysis-container"><!-- AI分析内容将在这里显示 --></div>
+            </div>
+            <div class="disclaimer">
+                <strong>重要提示：</strong>本测评所得结果仅作NPD相关倾向的初步参考，不可替代专业诊断。如感到困扰，请与心理咨询师或精神科医师联系。
+            </div>
+        </div><!-- end result-page -->
+    </div><!-- end container -->
+
+    <script>
+        (function () {
+            const accessGranted = sessionStorage.getItem('npdTestAccessGranted');
+            if (accessGranted !== 'true') {
+                window.location.href = 'npd-test-start.html';
+            }
+        })();
+    </script>
+    <script src="npd-test.js"></script>
+    <!-- copyright -->
+    <div class="footer-copyright">Copyright © HC.emotion</div>
+</body>
+</html>
