@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SM倾向测试</title>
+    <link rel="stylesheet" href="sm-test.css">
+</head>
+<body>
+    <!-- LOGO区域 -->
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo-image">
+    </div>
+    <div class="container">
+        <!-- 进度条头部 -->
+        <div class="progress-header" id="progress-header" style="display: none;">
+            <div class="progress-info">
+                <span class="progress-text" id="progress-text">题目 1 / 30</span>
+                <span class="progress-text" id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <h1>SM倾向测试（话题性版）</h1>
+            <div class="intro-text">
+                <p>这是一套围绕<strong>权力交换、感官体验与亲密界限</strong>设计的 30 道场景题，帮助你理解自己在 SM（Sadomasochism）倾向谱系中的位置。题目源于真实生活与心理咨询案例，用来探索偏好，而非贴标签。</p>
+                <p><strong>作答方式：</strong>A=低倾向，B=中等倾向，C=高倾向。请依据第一反应选择最贴近的选项，完整作答约需 10 分钟。</p>
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>支配倾向</strong> — 探索你在关系中掌控、领导与决策的欲望与舒适度</li>
+                    <li><strong>服从倾向</strong> — 观察你在被引导、顺从或服从安排时的心理反应</li>
+                    <li><strong>感官寻求</strong> — 衡量你对触觉、痛觉与身体刺激的偏好强度</li>
+                    <li><strong>边缘探索</strong> — 了解你对非传统体验、冒险元素的好奇与投入度</li>
+                    <li><strong>规则接受度</strong> — 评估你对界限、安全词与契约的态度</li>
+                </ul>
+                <p>完成测评后将获得 SM 倾向指数、五大维度占比以及 AI 深度解读，协助你以更安全、理性的方式审视自己的欲望与界限。若结果让你感到不安，请务必与专业心理师或亲密关系教练讨论。</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始测试</button>
+            <div class="disclaimer">
+                <strong>安全提醒：</strong>本测评仅用于自我探索，无任何诊断效力。SM 实践须建立在双方知情同意、安全与信任的前提上，务必准备安全词与事后照护。如有创伤史或心理困扰，请先咨询专业人士。
+            </div>
+        </div>
+
+        <!-- 单题测试页面 -->
+        <div id="question-page" class="page">
+            <div class="single-question">
+                <div class="question-number" id="question-number">题目 1 / 30</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="question-options"></div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>上一题</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 答题总览页面 -->
+        <div id="overview-page" class="page">
+            <h2>答题总览</h2>
+            <p style="margin-bottom: 20px; color: #adb5bd;">请检查您的答案，确认无误后点击“进行分析”按钮。</p>
+            <div class="overview-container" id="overview-container"></div>
+            <div style="text-align: center;">
+                <button class="btn btn-secondary" onclick="backToQuestion()">返回答题</button>
+                <button class="btn" onclick="analyzeResults()" id="analyze-btn">进行分析</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <h2>您的测试结果</h2>
+            
+            <div class="total-score-display">
+                <div class="score-number" id="total-score-number">-</div>
+                <div class="score-label" id="score-label">SM倾向等级</div>
+                <div class="score-description" id="score-description">-</div>
+            </div>
+            <div class="result-layout">
+                <div class="result-left">
+                    <div class="radar-chart" id="radar-chart-container">
+                        <!-- SVG雷达图将在此处生成 -->
+                    </div>
+                </div>
+                
+                <div class="result-right">
+                    <h3>各维度详细得分</h3>
+                    <div id="dimension-scores"></div>
+                </div>
+            </div>
+            <!-- 评分等级样式定义于 sm-test.css -->
+
+            <div class="score-legend" aria-labelledby="score-legend-title">
+                <h3 id="score-legend-title">SM倾向等级说明</h3>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-low">0%-39%</div>
+                    <div class="legend-text"><strong>低倾向</strong> 你更偏好传统、安全的相处方式，对权力交换或强烈感官刺激兴趣不高。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-medium">40%-69%</div>
+                    <div class="legend-text"><strong>中等倾向</strong> 你对 SM 元素抱持开放态度，会在界限内探索，重视沟通与安全设置。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-high">70%-100%</div>
+                    <div class="legend-text"><strong>高倾向</strong> 你对强烈体验及角色扮演具高兴趣，建议加强安全词、界限与事后关怀。</div>
+                </div>
+            </div>
+            <!-- AI深度分析区域 -->
+            <div class="ai-analysis-section">
+                <div class="ai-analysis-header">
+                    <h3>🤖 AI SM倾向深读</h3>
+                </div>
+                <div id="ai-analysis-container"><!-- AI分析内容将在这里显示 --></div>
+            </div>
+            <div class="disclaimer">
+                <strong>专业声明：</strong>本测评参考感觉寻求理论、权力动机理论与 BDSM 心理学研究，仅供自我觉察。任何实践请确保自愿、安全、理智（SSC）或知情、可协商、行责任（RACK）。
+            </div>
+        </div><!-- end result-page -->
+    </div><!-- end container -->
+
+    <script>
+        (function () {
+            const accessGranted = sessionStorage.getItem('smTestAccessGranted');
+            if (accessGranted !== 'true') {
+                window.location.href = 'sm-test-start.html';
+            }
+        })();
+    </script>
+    <script src="sm-test.js"></script>
+    <!-- copyright -->
+    <div class="footer-copyright">Copyright © HC.emotion</div>
+</body>
+</html>
