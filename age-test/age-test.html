@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理年龄测试（话题性版）</title>
+    <link rel="stylesheet" href="age-test.css">
+</head>
+<body>
+    <!-- LOGO区域 -->
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo-image">
+    </div>
+    <div class="container">
+        <!-- 进度条头部 -->
+        <div class="progress-header" id="progress-header" style="display: none;">
+            <div class="progress-info">
+                <span class="progress-text" id="progress-text">题目 1 / 30</span>
+                <span class="progress-text" id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <h1>心理年龄测试（话题性版）</h1>
+            <div class="intro-text">
+                <p>欢迎体验这套专为当代都市青年与轻熟族设计的<strong>话题性心理年龄测试</strong>。我们将生活方式、情感经营、社交态度与价值选择融合成 30 道贴近真实情境的题目，帮助你识别心理节奏与“心智年龄段”。</p>
+                <p><strong>作答说明：</strong>每题仅选最贴近你的选项，A=年轻倾向，B=成熟倾向，C=年长倾向。请直觉作答，整套测验约 8-10 分钟即可完成。</p>
+                <ul style="margin: 20px 0; padding-left: 20px;">
+                    <li><strong>活力指数</strong> — 观察你对新鲜事物与生活节奏的热情程度</li>
+                    <li><strong>情感成熟度</strong> — 了解你在亲密关系与情绪调节上的成熟度</li>
+                    <li><strong>社交模式</strong> — 评估你在社交场域中的能量分配与互动风格</li>
+                    <li><strong>责任意识</strong> — 衡量你在金钱、工作与现实责任间的布局策略</li>
+                    <li><strong>人生智慧</strong> — 呈现你对人生阶段转换与价值观的整合度</li>
+                </ul>
+                <p>测验完成后将提供心理年龄指数、五大维度占比与 AI 深度解读，协助你从不同角度检视当前心态走向。结果仅作自我觉察参考，如有持续性困扰，建议咨询专业心理师。</p>
+            </div>
+            <button class="btn" onclick="startTest()">开始测试</button>
+            <div class="disclaimer">
+                <strong>重要提示：</strong>心理年龄并非生理年龄或专业诊断结果，仅供自我觉察与对话使用。如心理状态影响到生活或人际，请及时向专业心理健康人员求助。
+            </div>
+        </div>
+
+        <!-- 单题测试页面 -->
+        <div id="question-page" class="page">
+            <div class="single-question">
+                <div class="question-number" id="question-number">题目 1 / 30</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="question-options"></div>
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>上一题</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>下一题</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 答题总览页面 -->
+        <div id="overview-page" class="page">
+            <h2>答题总览</h2>
+            <p style="margin-bottom: 20px; color: #666;">请检查您的答案，确认无误后点击"进行分析"按钮。</p>
+            <div class="overview-container" id="overview-container"></div>
+            <div style="text-align: center;">
+                <button class="btn btn-secondary" onclick="backToQuestion()">返回答题</button>
+                <button class="btn" onclick="analyzeResults()" id="analyze-btn">进行分析</button>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="result-page" class="page">
+            <h2>您的测试结果</h2>
+            
+            <div class="total-score-display">
+                <div class="score-number" id="total-score-number">-</div>
+                <div class="score-label" id="score-label">心理年龄段</div>
+                <div class="score-description" id="score-description">-</div>
+            </div>
+            <div class="result-layout">
+                <div class="result-left">
+                    <div class="radar-chart" id="radar-chart-container">
+                        <!-- SVG雷达图将在此处生成 -->
+                    </div>
+                </div>
+                
+                <div class="result-right">
+                    <h3>各维度详细得分</h3>
+                    <div id="dimension-scores"></div>
+                </div>
+            </div>
+            <!-- 评分等级样式定义于 age-test.css -->
+
+            <div class="score-legend" aria-labelledby="score-legend-title">
+                <h3 id="score-legend-title">心理年龄段说明</h3>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-young">20%-35%</div>
+                    <div class="legend-text"><strong>心理年龄 20-30 岁 · 年轻心态</strong> 活力充沛、好奇心强，适合大胆尝试新体验，但也要留意节奏与身心界限。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-balanced">36%-65%</div>
+                    <div class="legend-text"><strong>心理年龄 31-50 岁 · 成熟稳重</strong> 兼顾理想与现实，具备稳定而灵活的思维，可进一步深化中长期规划。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-wise">66%-85%</div>
+                    <div class="legend-text"><strong>心理年龄 51-70 岁 · 智慧从容</strong> 长于统筹与洞察，善于平衡人际与个人需求，建议保持适度活力与新鲜感。</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-range legend-elder">86%-100%</div>
+                    <div class="legend-text"><strong>心理年龄 70+ 岁 · 超然豁达</strong> 价值取向稳健，对人生有高度宽容与整合力，可适时引入活力型体验保持弹性。</div>
+                </div>
+            </div>
+            <!-- AI深度分析区域 -->
+            <div class="ai-analysis-section">
+                <div class="ai-analysis-header">
+                    <h3>🤖 AI心理年龄深读</h3>
+                </div>
+                <div id="ai-analysis-container"><!-- AI分析内容将在这里显示 --></div>
+            </div>
+            <div class="disclaimer">
+                <strong>重要提示：</strong>本测评旨在提供心理年龄倾向的初步参考，不可取代专业评估或医疗建议。如结果引发困扰，请与合格的心理健康专业人士联系。
+            </div>
+        </div><!-- end result-page -->
+    </div><!-- end container -->
+
+    <script>
+        (function () {
+            const accessGranted = sessionStorage.getItem('ageTestAccessGranted');
+            if (accessGranted !== 'true') {
+                window.location.href = 'age-test-start.html';
+            }
+        })();
+    </script>
+    <script src="age-test.js"></script>
+    <!-- copyright -->
+    <div class="footer-copyright">Copyright © HC.emotion</div>
+</body>
+</html>
